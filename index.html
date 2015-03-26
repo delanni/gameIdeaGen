@@ -76,9 +76,16 @@
 				var choice = possibilities.map(function(trait){
 					return trait.random();
 				});
+				choice.name = generateName();
 				
-				stateObject.mixin(choice);
-				stateObject.name = generateName();
+				if (Object.observe){
+					stateObject.mixin(choice);
+					return;
+				}
+				
+				Object.keys(stateObject).forEach(function(k){
+					document.getElementById(k+"Label").textContent = choice[k];
+				});
 			}
 			
 		</script>
