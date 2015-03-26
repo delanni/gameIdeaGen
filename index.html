@@ -13,6 +13,7 @@
 			<div><label>Theme: </label><label id="themeLabel"></label></div>
 			<div><label>Core Mechanics: </label><label id="coreMechanicsLabel"></label></div>
 			<div><label>Extra: </label><label id="extraLabel"></label></div>
+			<button onclick="pick()">Hit me!</button>
 		</form>
 		
 		<script type="text/javascript">
@@ -79,8 +80,6 @@
 				stateObject.mixin(choice);
 				stateObject.name = generateName();
 			}
-			
-			setInterval(pick,3000);
 			
 		</script>
 		<footer>©Sphynx ag., 2015</footer>
