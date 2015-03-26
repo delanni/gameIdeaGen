@@ -1,0 +1,88 @@
+<DOCYPE html>
+<html>
+	<head>
+		<style type="text/css">
+			
+		</style>
+		<title> Game Idea Generator </title>
+	</head>
+	<body>
+		<form>
+			<h1 id="nameLabel"></h1>
+			<div><label>Genre: </label><label id="genreLabel"></label></div>
+			<div><label>Theme: </label><label id="themeLabel"></label></div>
+			<div><label>Core Mechanics: </label><label id="coreMechanicsLabel"></label></div>
+			<div><label>Extra: </label><label id="extraLabel"></label></div>
+		</form>
+		
+		<script type="text/javascript">
+			function bind(object, prop, target, targetField){
+				Object.observe(object,function(changes){
+					changes.forEach(function(change){
+						if (change.name != prop) return;
+						target[targetField] = change.object[change.name];
+					});
+				});
+			}
+			
+			var stateObject = {
+				genre:"",
+				theme:"",
+				coreMechanics:"",
+				extra:"",
+				name:""
+			};
+			
+			var k = Object.keys(stateObject);
+			k.forEach(function(objectProperty){
+				bind(stateObject, objectProperty, document.getElementById(objectProperty + "Label"), "textContent");
+			});
+			
+			Array.prototype.random = function(){
+				return this[Math.floor(Math.random()*this.length)];
+			};
+			
+			Object.prototype.map = function(transfn){
+				var k = Object.keys(this);
+				var out = {};
+				for(var i=0;i<k.length;i++){
+					out[k[i]] = transfn(this[k[i]]);
+				}
+				return out;
+			};
+			
+			Object.prototype.mixin = function(otherObj){
+				var k = Object.keys(otherObj);
+				for(var i=0;i<k.length;i++){
+					this[k[i]] = otherObj[k[i]];
+				}
+			}
+			
+			var possibilities = {
+				genre:["Fighting", "Action", "Platformer", "FPS", "RTS", "Turn based", "Simulation", "Toilet-game", "Role playing"],
+				theme:["Ninjas","Pirates","Aliens","Business","Superheroes", "Animals", "Zombiletons"],
+				coreMechanics:["Tap-tap","Timed interaction","Micro management", "Run around", "Explosions", "Agility", "WASD"],
+				extra:["Audio", "RPG elements", "BLOOD BLOOD"]
+			}
+			
+			function generateName(){
+				return ["Raiders","Killers","6 feet", "Omiguzu", "Brothers", "Blood"].random() + 
+				" of " +
+				["Iwagashi", "Pidgeons", "Nokia","SKELETOR", "DIRT", "seven seas", "Monkey bees"].random();
+			}
+			
+			function pick(){
+				var choice = possibilities.map(function(trait){
+					return trait.random();
+				});
+				
+				stateObject.mixin(choice);
+				stateObject.name = generateName();
+			}
+			
+			setInterval(pick,3000);
+			
+		</script>
+		<footer>©Sphynx ag., 2015</footer>
+	</body>
+</html>
