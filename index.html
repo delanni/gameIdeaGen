@@ -20,8 +20,9 @@
 			window.onerror = function(e){
 				alert(e);
 			}
-			
+		
 			function bind(object, prop, target, targetField){
+				if (!Object.observe) return;
 				Object.observe(object,function(changes){
 					changes.forEach(function(change){
 						if (change.name != prop) return;
