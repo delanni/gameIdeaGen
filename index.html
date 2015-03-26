@@ -1,93 +1,65 @@
-<DOCYPE html>
+<!DOCYPE html>
 <html>
-	<head>
-		<meta charset='utf-8'>
-		<meta encoding='utf-8'>
-		<style type="text/css">
-			
-		</style>
-		<title> Game Idea Generator </title>
-	</head>
-	<body>
-		<div>
-			<h1 id="nameLabel"></h1>
-			<div><span>Genre: </span><span id="genreLabel"></span></div>
-			<div><span>Theme: </span><span id="themeLabel"></span></div>
-			<div><span>Core Mechanics: </span><span id="coreMechanicsLabel"></span></div>
-			<div><span>Extra: </span><span id="extraLabel"></span></div>
-		</div>
-		<input type='button' value='Hit me!' onclick="pick()"></input>
-		
-		<script type="text/javascript">
-			window.onerror = function(e){
-				alert(e);
-			}
-			
-			var stateObject = {
-				genre:"",
-				theme:"",
-				coreMechanics:"",
-				extra:"",
-				_prefix:"",
-				_bridge:"",
-				_postfix:"",
-				get name(){ return stateObject._prefix+stateObject._bridge+stateObject._postfix }
-			};
-			
-			Object.prototype.map = function(transfn){
-				var k = Object.keys(this);
-				var out = {};
-				for(var i=0;i<k.length;i++){
-					out[k[i]] = transfn(this[k[i]]);
-				}
-				return out;
-			};
-			
-			var possibilities = {
-				genre:["Business", "Stealth", "Sandbox", "Racing", "Sports", "Maze","MOBA","Fighting", "Action", "Platformer", "FPS", "RTS", "Turn based", "Simulation", "Toilet-game", "Role playing"],
-				theme:["Ghost", "Cat", "Dogs", "Pixies","Apocalypse", "Dragon", "Horror", "Time travel", "World war","Ninjas","Pirates","Aliens","Business","Superheroes", "Animals", "Zombies", "Middle ages", "Tech", "Hell", "Ponycorn", "Kids", "Old people", "Sexy"],
-				coreMechanics:["Button smashing", "Serenity", "Risk and reward","Worker placement","Pointless", "Waiting", "Cards", "Capture/eliminate","Tap-tap","Timed interaction","Micro management", "Run around", "Explosions", "Agility", "WASD"],
-				extra:["Audio", "RPG elements", "BLOOD", "2d", "3d", "Explosions", "Action elements","Ponies"],
-				_prefix:["Journey","Terror", "Dream","Raiders","Killers","6 feet", "Omiguzu", "Brothers", "Blood", "Heroes", "Zombies", "Mommy", "Anger", "Money"],
-				_bridge: [" of "," ", "'s ","-"," and ",", Money, ", " without ", " of the ", " against ", " who love ", " vs. ", " for ", " and the ", " to the "],
-				_postfix : ["Iwagashi", "Pidgeons", "Void","Love", "Dirt", "Seven seas", "Monkey bees", "Dogs", "Unlimited", "Stars", "Universe", "Death", "Demons", "Money"]
-			}
 
-			function pick(choiceKey){
-				var traits = Object.keys(stateObject);
+<head>
+    <meta charset='UTF-8'>
+    <meta encoding='UTF-8'>
+    <meta name="description" content="A silly little helper for your game ideas">
+    <meta name="keywords" content="GAME,GAME DEVELOPMENT,IDEA,GAME IDEA">
+    <meta name="author" content="Alex Szabo, @alex_on_the_web">
 
-				if (choiceKey){
-					var choice = {};
-					choiceKey.split("").map(function(letter,traitId){
-						var idx = letter.charCodeAt(0) - "a".charCodeAt(0);
-						choice[traits[traitId]] = possibilities[traits[traitId]][idx];
-					});
-				}  else {
-					var code = "";
-					var choice = possibilities.map(function(trait){
-						var r = Math.floor(Math.random()*trait.length);
-						code += String.fromCharCode(r+'a'.charCodeAt(0));
-						return trait[r];
-					});
-					window.location.hash = code;
-				}
-				
-				traits.forEach(function(k){
-					stateObject[k] = choice[k];
-					var el = document.getElementById(k+"Label");
-					el && (el.textContent = stateObject[k]);
-				});
-			}
+    <meta property="og:title" content="Game Idea Generator" />
+    <meta property="og:type" content="application.game" />
+    <meta property="og:url" content="http://delanni.github.io/gameIdeaGen" />
+    <meta property="og:image" content="http://delanni.github.io/gameIdeaGen/gig.jpg" />
 
-			window.onpopstate = function(){
-				if (window.location.hash){
-					pick(window.location.hash.substring(1));
-				}
-			}
+    <link rel="stylesheet" href='style.css' />
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-			pick(window.location.hash.substring(1));
-			
-		</script>
-		<footer>©Sphynx ag., 2015</footer>
-	</body>
+        ga('create', 'UA-53641010-6', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <title>Game Idea Generator</title>
+</head>
+
+<body>
+    <div id="gamePanel">
+        <h2 id="nameLabel"></h2>
+        <hr />
+        <div id="properties">
+            <div>Genre: </div>
+            <div class='label' id="genreLabel"></div>
+            <div>Theme: </div>
+            <div class='label' id="themeLabel"></div>
+            <div>Core Mechanics: </div>
+            <div class='label' id="coreMechanicsLabel"></div>
+            <div>Extra: </div>
+            <div class='label' id="extraLabel"></div>
+        </div>
+        <hr />
+        <div>
+            <input type='button' id='hitme' value='Hit me!' onclick="pick()"></input>
+        </div>
+    </div>
+
+    <div id='history'>
+        <input type='button' value='Save this!' onclick="save()"></input>
+    </div>
+
+    <script type="text/javascript" src='code.js'>
+    </script>
+    <footer>©Sphynx ag., 2015</footer>
+</body>
+
 </html>
