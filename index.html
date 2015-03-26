@@ -1,34 +1,26 @@
 <DOCYPE html>
 <html>
 	<head>
+		<meta charset='utf-8'>
+		<meta encoding='utf-8'>
 		<style type="text/css">
 			
 		</style>
 		<title> Game Idea Generator </title>
 	</head>
 	<body>
-		<form>
+		<div>
 			<h1 id="nameLabel"></h1>
-			<div><label>Genre: </label><label id="genreLabel"></label></div>
-			<div><label>Theme: </label><label id="themeLabel"></label></div>
-			<div><label>Core Mechanics: </label><label id="coreMechanicsLabel"></label></div>
-			<div><label>Extra: </label><label id="extraLabel"></label></div>
-		</form>
+			<div><span>Genre: </span><span id="genreLabel"></span></div>
+			<div><span>Theme: </span><span id="themeLabel"></span></div>
+			<div><span>Core Mechanics: </span><span id="coreMechanicsLabel"></span></div>
+			<div><span>Extra: </span><span id="extraLabel"></span></div>
+		</div>
 		<input type='button' value='Hit me!' onclick="pick()"></input>
 		
 		<script type="text/javascript">
 			window.onerror = function(e){
 				alert(e);
-			}
-		
-			function bind(object, prop, target, targetField){
-				if (!Object.observe) return;
-				Object.observe(object,function(changes){
-					changes.forEach(function(change){
-						if (change.name != prop) return;
-						target[targetField] = change.object[change.name];
-					});
-				});
 			}
 			
 			var stateObject = {
@@ -36,16 +28,10 @@
 				theme:"",
 				coreMechanics:"",
 				extra:"",
-				name:""
-			};
-			
-			var k = Object.keys(stateObject);
-			k.forEach(function(objectProperty){
-				bind(stateObject, objectProperty, document.getElementById(objectProperty + "Label"), "textContent");
-			});
-			
-			Array.prototype.random = function(){
-				return this[Math.floor(Math.random()*this.length)];
+				_prefix:"",
+				_bridge:"",
+				_postfix:"",
+				get name(){ return stateObject._prefix+stateObject._bridge+stateObject._postfix }
 			};
 			
 			Object.prototype.map = function(transfn){
@@ -57,41 +43,49 @@
 				return out;
 			};
 			
-			Object.prototype.mixin = function(otherObj){
-				var k = Object.keys(otherObj);
-				for(var i=0;i<k.length;i++){
-					this[k[i]] = otherObj[k[i]];
-				}
-			}
-			
 			var possibilities = {
 				genre:["Business", "Stealth", "Sandbox", "Racing", "Sports", "Maze","MOBA","Fighting", "Action", "Platformer", "FPS", "RTS", "Turn based", "Simulation", "Toilet-game", "Role playing"],
-				theme:["Ghost", "Cat", "Pixies","Apocalypse", "Dragon", "Horror", "Time travel", "World war","Ninjas","Pirates","Aliens","Business","Superheroes", "Animals", "Zombies", "Middle ages", "Tech", "Hell", "Ponycorn"],
-				coreMechanics:["Risk and reward","Worker placement","Pointless", "Waiting", "Cards", "Capture/eliminate","Tap-tap","Timed interaction","Micro management", "Run around", "Explosions", "Agility", "WASD"],
-				extra:["Audio", "RPG elements", "BLOOD BLOOD", "2d", "3d", "Explosions"]
+				theme:["Ghost", "Cat", "Dogs", "Pixies","Apocalypse", "Dragon", "Horror", "Time travel", "World war","Ninjas","Pirates","Aliens","Business","Superheroes", "Animals", "Zombies", "Middle ages", "Tech", "Hell", "Ponycorn", "Kids", "Old people", "Sexy"],
+				coreMechanics:["Button smashing", "Serenity", "Risk and reward","Worker placement","Pointless", "Waiting", "Cards", "Capture/eliminate","Tap-tap","Timed interaction","Micro management", "Run around", "Explosions", "Agility", "WASD"],
+				extra:["Audio", "RPG elements", "BLOOD", "2d", "3d", "Explosions", "Action elements","Ponies"],
+				_prefix:["Journey","Terror", "Dream","Raiders","Killers","6 feet", "Omiguzu", "Brothers", "Blood", "Heroes", "Zombies", "Mommy", "Anger", "Money"],
+				_bridge: [" of "," ", "'s ","-"," and ",", Money, ", " without ", " of the ", " against ", " who love ", " vs. ", " for ", " and the ", " to the "],
+				_postfix : ["Iwagashi", "Pidgeons", "Void","Love", "Dirt", "Seven seas", "Monkey bees", "Dogs", "Unlimited", "Stars", "Universe", "Death", "Demons", "Money"]
 			}
-			
-			function generateName(){
-				return ["Journey","Terror", "Dream","Raiders","Killers","6 feet", "Omiguzu", "Brothers", "Blood", "Heroes", "Zombies", "Mommy", "Key", "Money"].random() + 
-				[" of "," ","-"," and ",", Money, ", " without ", " of the ", " against ", " who love ", " vs. ", " for ", " and the ", " to the "].random() +
-				["Iwagashi", "Pidgeons", "Nothingness","Sekeletor", "Dirt", "Seven seas", "Monkey bees", "Dogs", "Unlimited", "Starforce", "Universe", "Death", "Demons", "Money"].random();
-			}
-			
-			function pick(){
-				var choice = possibilities.map(function(trait){
-					return trait.random();
-				});
-				choice.name = generateName();
-				
-				if (Object.observe){
-					stateObject.mixin(choice);
-					return;
+
+			function pick(choiceKey){
+				var traits = Object.keys(stateObject);
+
+				if (choiceKey){
+					var choice = {};
+					choiceKey.split("").map(function(letter,traitId){
+						var idx = letter.charCodeAt(0) - "a".charCodeAt(0);
+						choice[traits[traitId]] = possibilities[traits[traitId]][idx];
+					});
+				}  else {
+					var code = "";
+					var choice = possibilities.map(function(trait){
+						var r = Math.floor(Math.random()*trait.length);
+						code += String.fromCharCode(r+'a'.charCodeAt(0));
+						return trait[r];
+					});
+					window.location.hash = code;
 				}
 				
-				Object.keys(stateObject).forEach(function(k){
-					document.getElementById(k+"Label").textContent = choice[k];
+				traits.forEach(function(k){
+					stateObject[k] = choice[k];
+					var el = document.getElementById(k+"Label");
+					el && (el.textContent = stateObject[k]);
 				});
 			}
+
+			window.onpopstate = function(){
+				if (window.location.hash){
+					pick(window.location.hash.substring(1));
+				}
+			}
+
+			pick(window.location.hash.substring(1));
 			
 		</script>
 		<footer>©Sphynx ag., 2015</footer>
