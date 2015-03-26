@@ -17,6 +17,10 @@
 		<input type='button' value='Hit me!' onclick="pick()"></input>
 		
 		<script type="text/javascript">
+			window.onerror = function(e){
+				alert(e);
+			}
+			
 			function bind(object, prop, target, targetField){
 				Object.observe(object,function(changes){
 					changes.forEach(function(change){
