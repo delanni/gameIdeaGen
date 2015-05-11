@@ -1,0 +1,55 @@
+body {
+	background: rgb(240, 163, 163);
+	color: rgb(107, 59, 42);
+}
+.gameLink {
+	background: #3FE29B;
+	margin: 10px;
+	padding: 6px;
+	border-radius: 6px;
+	text-decoration: none;
+	color: rgb(245, 245, 218);
+	display: inline-block;
+}
+
+#gamePanel {
+	border: solid blueviolet;
+	border-radius: 12px;
+	padding: 12px;
+	width: 370px;
+	margin: auto;
+}
+
+#properties{
+	display: table;
+	width: 100%;
+}
+
+#properties>div{
+	display:table-row;
+}
+
+#properties>div:nth-child(even){
+	text-align:center;
+	font-size:large;
+	background-color: rgba(7,8,9,0.1);
+}
+
+h2 {
+	text-align: center;
+	background: rgb(188, 146, 205);
+}
+
+#hitme{
+	width:100%;
+}
+
+#history{
+	width: 80%;
+	margin: 20px auto;
+}
+
+footer{
+	position: absolute;
+	bottom: 10px;
+}

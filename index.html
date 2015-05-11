@@ -1,88 +1,67 @@
-<DOCYPE html>
+<!DOCYPE html>
 <html>
-	<head>
-		<style type="text/css">
-			
-		</style>
-		<title> Game Idea Generator </title>
-	</head>
-	<body>
-		<form>
-			<h1 id="nameLabel"></h1>
-			<div><label>Genre: </label><label id="genreLabel"></label></div>
-			<div><label>Theme: </label><label id="themeLabel"></label></div>
-			<div><label>Core Mechanics: </label><label id="coreMechanicsLabel"></label></div>
-			<div><label>Extra: </label><label id="extraLabel"></label></div>
-		</form>
-		
-		<script type="text/javascript">
-			function bind(object, prop, target, targetField){
-				Object.observe(object,function(changes){
-					changes.forEach(function(change){
-						if (change.name != prop) return;
-						target[targetField] = change.object[change.name];
-					});
-				});
-			}
-			
-			var stateObject = {
-				genre:"",
-				theme:"",
-				coreMechanics:"",
-				extra:"",
-				name:""
-			};
-			
-			var k = Object.keys(stateObject);
-			k.forEach(function(objectProperty){
-				bind(stateObject, objectProperty, document.getElementById(objectProperty + "Label"), "textContent");
-			});
-			
-			Array.prototype.random = function(){
-				return this[Math.floor(Math.random()*this.length)];
-			};
-			
-			Object.prototype.map = function(transfn){
-				var k = Object.keys(this);
-				var out = {};
-				for(var i=0;i<k.length;i++){
-					out[k[i]] = transfn(this[k[i]]);
-				}
-				return out;
-			};
-			
-			Object.prototype.mixin = function(otherObj){
-				var k = Object.keys(otherObj);
-				for(var i=0;i<k.length;i++){
-					this[k[i]] = otherObj[k[i]];
-				}
-			}
-			
-			var possibilities = {
-				genre:["Fighting", "Action", "Platformer", "FPS", "RTS", "Turn based", "Simulation", "Toilet-game", "Role playing"],
-				theme:["Ninjas","Pirates","Aliens","Business","Superheroes", "Animals", "Zombiletons"],
-				coreMechanics:["Tap-tap","Timed interaction","Micro management", "Run around", "Explosions", "Agility", "WASD"],
-				extra:["Audio", "RPG elements", "BLOOD BLOOD"]
-			}
-			
-			function generateName(){
-				return ["Raiders","Killers","6 feet", "Omiguzu", "Brothers", "Blood"].random() + 
-				" of " +
-				["Iwagashi", "Pidgeons", "Nokia","SKELETOR", "DIRT", "seven seas", "Monkey bees"].random();
-			}
-			
-			function pick(){
-				var choice = possibilities.map(function(trait){
-					return trait.random();
-				});
-				
-				stateObject.mixin(choice);
-				stateObject.name = generateName();
-			}
-			
-			setInterval(pick,3000);
-			
-		</script>
-		<footer>©Sphynx ag., 2015</footer>
-	</body>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta encoding='UTF-8'>
+    <meta name="description" content="A silly little helper for your game ideas">
+    <meta name="keywords" content="GAME,GAME DEVELOPMENT,IDEA,GAME IDEA">
+    <meta name="author" content="Alex Szabo, @alex_on_the_web">
+
+    <meta name="viewport" content="width=device-width">
+
+    <meta property="og:title" content="Game Idea Generator" />
+    <meta property="og:type" content="application.game" />
+    <meta property="og:url" content="http://delanni.github.io/gameIdeaGen" />
+    <meta property="og:image" content="http://delanni.github.io/gameIdeaGen/gig.jpg" />
+
+    <link rel="stylesheet" href='style.css' />
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-53641010-6', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <title>Game Idea Generator</title>
+</head>
+
+<body>
+    <div id="gamePanel">
+        <h2 id="nameLabel"></h2>
+        <hr />
+        <div id="properties">
+            <div>Genre: </div>
+            <div class='label' id="genreLabel"></div>
+            <div>Theme: </div>
+            <div class='label' id="themeLabel"></div>
+            <div>Core Mechanics: </div>
+            <div class='label' id="coreMechanicsLabel"></div>
+            <div>Extra: </div>
+            <div class='label' id="extraLabel"></div>
+        </div>
+        <hr />
+        <div>
+            <input type='button' id='hitme' value='Hit me!' onclick="pick()"></input>
+        </div>
+    </div>
+
+    <div id='history'>
+        <input type='button' value='Save this!' onclick="save()"></input>
+    </div>
+
+    <script type="text/javascript" src='code.js'>
+    </script>
+    <footer>©Sphynx ag., 2015</footer>
+</body>
+
 </html>
