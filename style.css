@@ -53,3 +53,16 @@ footer{
 	position: absolute;
 	bottom: 10px;
 }
+
+#cc-notice {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	font-size: 12px;
+	color: rgb(107, 59, 42);
+}
+
+#cc-notice a {
+	color: rgb(107, 59, 42);
+	text-decoration: underline;
+}
